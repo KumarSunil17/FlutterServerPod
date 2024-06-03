@@ -10,8 +10,7 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../endpoints/example_endpoint.dart' as _i2;
-import '../endpoints/user_endpoint.dart' as _i3;
-import 'package:flutter_server_pod_server/src/generated/user_class.dart' as _i4;
+import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i3;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -22,13 +21,7 @@ class Endpoints extends _i1.EndpointDispatch {
           server,
           'example',
           null,
-        ),
-      'user': _i3.UserEndpoint()
-        ..initialize(
-          server,
-          'user',
-          null,
-        ),
+        )
     };
     connectors['example'] = _i1.EndpointConnector(
       name: 'example',
@@ -54,92 +47,6 @@ class Endpoints extends _i1.EndpointDispatch {
         )
       },
     );
-    connectors['user'] = _i1.EndpointConnector(
-      name: 'user',
-      endpoint: endpoints['user']!,
-      methodConnectors: {
-        'create': _i1.MethodConnector(
-          name: 'create',
-          params: {
-            'user': _i1.ParameterDescription(
-              name: 'user',
-              type: _i1.getType<_i4.User>(),
-              nullable: false,
-            )
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['user'] as _i3.UserEndpoint).create(
-            session,
-            params['user'],
-          ),
-        ),
-        'read': _i1.MethodConnector(
-          name: 'read',
-          params: {
-            'id': _i1.ParameterDescription(
-              name: 'id',
-              type: _i1.getType<int>(),
-              nullable: false,
-            )
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['user'] as _i3.UserEndpoint).read(
-            session,
-            params['id'],
-          ),
-        ),
-        'readAll': _i1.MethodConnector(
-          name: 'readAll',
-          params: {},
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['user'] as _i3.UserEndpoint).readAll(session),
-        ),
-        'update': _i1.MethodConnector(
-          name: 'update',
-          params: {
-            'user': _i1.ParameterDescription(
-              name: 'user',
-              type: _i1.getType<_i4.User>(),
-              nullable: false,
-            )
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['user'] as _i3.UserEndpoint).update(
-            session,
-            params['user'],
-          ),
-        ),
-        'delete': _i1.MethodConnector(
-          name: 'delete',
-          params: {
-            'user': _i1.ParameterDescription(
-              name: 'user',
-              type: _i1.getType<_i4.User>(),
-              nullable: false,
-            )
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['user'] as _i3.UserEndpoint).delete(
-            session,
-            params['user'],
-          ),
-        ),
-      },
-    );
+    modules['serverpod_auth'] = _i3.Endpoints()..initializeEndpoints(server);
   }
 }

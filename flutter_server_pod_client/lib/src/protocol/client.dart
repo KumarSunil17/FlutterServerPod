@@ -10,7 +10,7 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'dart:async' as _i2;
-import 'package:flutter_server_pod_client/src/protocol/user_class.dart' as _i3;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i3;
 import 'protocol.dart' as _i4;
 
 /// {@category Endpoint}
@@ -27,46 +27,12 @@ class EndpointExample extends _i1.EndpointRef {
       );
 }
 
-/// {@category Endpoint}
-class EndpointUser extends _i1.EndpointRef {
-  EndpointUser(_i1.EndpointCaller caller) : super(caller);
+class _Modules {
+  _Modules(Client client) {
+    auth = _i3.Caller(client);
+  }
 
-  @override
-  String get name => 'user';
-
-  _i2.Future<_i3.User> create(_i3.User user) =>
-      caller.callServerEndpoint<_i3.User>(
-        'user',
-        'create',
-        {'user': user},
-      );
-
-  _i2.Future<_i3.User?> read(int id) => caller.callServerEndpoint<_i3.User?>(
-        'user',
-        'read',
-        {'id': id},
-      );
-
-  _i2.Future<List<_i3.User>> readAll() =>
-      caller.callServerEndpoint<List<_i3.User>>(
-        'user',
-        'readAll',
-        {},
-      );
-
-  _i2.Future<_i3.User> update(_i3.User user) =>
-      caller.callServerEndpoint<_i3.User>(
-        'user',
-        'update',
-        {'user': user},
-      );
-
-  _i2.Future<_i3.User> delete(_i3.User user) =>
-      caller.callServerEndpoint<_i3.User>(
-        'user',
-        'delete',
-        {'user': user},
-      );
+  late final _i3.Caller auth;
 }
 
 class Client extends _i1.ServerpodClient {
@@ -93,19 +59,17 @@ class Client extends _i1.ServerpodClient {
           onSucceededCall: onSucceededCall,
         ) {
     example = EndpointExample(this);
-    user = EndpointUser(this);
+    modules = _Modules(this);
   }
 
   late final EndpointExample example;
 
-  late final EndpointUser user;
+  late final _Modules modules;
 
   @override
-  Map<String, _i1.EndpointRef> get endpointRefLookup => {
-        'example': example,
-        'user': user,
-      };
+  Map<String, _i1.EndpointRef> get endpointRefLookup => {'example': example};
 
   @override
-  Map<String, _i1.ModuleEndpointCaller> get moduleLookup => {};
+  Map<String, _i1.ModuleEndpointCaller> get moduleLookup =>
+      {'auth': modules.auth};
 }

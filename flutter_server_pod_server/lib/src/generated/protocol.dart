@@ -11,11 +11,9 @@ library protocol; // ignore_for_file: no_leading_underscores_for_library_prefixe
 
 import 'package:serverpod/serverpod.dart' as _i1;
 import 'package:serverpod/protocol.dart' as _i2;
-import 'example.dart' as _i3;
-import 'user_class.dart' as _i4;
-import 'package:flutter_server_pod_server/src/generated/user_class.dart' as _i5;
+import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i3;
+import 'example.dart' as _i4;
 export 'example.dart';
-export 'user_class.dart';
 
 class Protocol extends _i1.SerializationManagerServer {
   Protocol._();
@@ -25,50 +23,7 @@ class Protocol extends _i1.SerializationManagerServer {
   static final Protocol _instance = Protocol._();
 
   static final List<_i2.TableDefinition> targetTableDefinitions = [
-    _i2.TableDefinition(
-      name: 'users',
-      dartName: 'User',
-      schema: 'public',
-      module: 'flutter_server_pod',
-      columns: [
-        _i2.ColumnDefinition(
-          name: 'id',
-          columnType: _i2.ColumnType.bigint,
-          isNullable: false,
-          dartType: 'int?',
-          columnDefault: 'nextval(\'users_id_seq\'::regclass)',
-        ),
-        _i2.ColumnDefinition(
-          name: 'name',
-          columnType: _i2.ColumnType.text,
-          isNullable: false,
-          dartType: 'String',
-        ),
-        _i2.ColumnDefinition(
-          name: 'age',
-          columnType: _i2.ColumnType.bigint,
-          isNullable: false,
-          dartType: 'int',
-        ),
-      ],
-      foreignKeys: [],
-      indexes: [
-        _i2.IndexDefinition(
-          indexName: 'users_pkey',
-          tableSpace: null,
-          elements: [
-            _i2.IndexElementDefinition(
-              type: _i2.IndexElementDefinitionType.column,
-              definition: 'id',
-            )
-          ],
-          type: 'btree',
-          isUnique: true,
-          isPrimary: true,
-        )
-      ],
-      managed: true,
-    ),
+    ..._i3.Protocol.targetTableDefinitions,
     ..._i2.Protocol.targetTableDefinitions,
   ];
 
@@ -78,22 +33,15 @@ class Protocol extends _i1.SerializationManagerServer {
     Type? t,
   ]) {
     t ??= T;
-    if (t == _i3.Example) {
-      return _i3.Example.fromJson(data) as T;
+    if (t == _i4.Example) {
+      return _i4.Example.fromJson(data) as T;
     }
-    if (t == _i4.User) {
-      return _i4.User.fromJson(data) as T;
+    if (t == _i1.getType<_i4.Example?>()) {
+      return (data != null ? _i4.Example.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i3.Example?>()) {
-      return (data != null ? _i3.Example.fromJson(data) : null) as T;
-    }
-    if (t == _i1.getType<_i4.User?>()) {
-      return (data != null ? _i4.User.fromJson(data) : null) as T;
-    }
-    if (t == List<_i5.User>) {
-      return (data as List).map((e) => deserialize<_i5.User>(e)).toList()
-          as dynamic;
-    }
+    try {
+      return _i3.Protocol().deserialize<T>(data, t);
+    } on _i1.DeserializationTypeNotFoundException catch (_) {}
     try {
       return _i2.Protocol().deserialize<T>(data, t);
     } on _i1.DeserializationTypeNotFoundException catch (_) {}
@@ -102,22 +50,25 @@ class Protocol extends _i1.SerializationManagerServer {
 
   @override
   String? getClassNameForObject(Object data) {
-    if (data is _i3.Example) {
-      return 'Example';
+    String? className;
+    className = _i3.Protocol().getClassNameForObject(data);
+    if (className != null) {
+      return 'serverpod_auth.$className';
     }
-    if (data is _i4.User) {
-      return 'User';
+    if (data is _i4.Example) {
+      return 'Example';
     }
     return super.getClassNameForObject(data);
   }
 
   @override
   dynamic deserializeByClassName(Map<String, dynamic> data) {
-    if (data['className'] == 'Example') {
-      return deserialize<_i3.Example>(data['data']);
+    if (data['className'].startsWith('serverpod_auth.')) {
+      data['className'] = data['className'].substring(15);
+      return _i3.Protocol().deserializeByClassName(data);
     }
-    if (data['className'] == 'User') {
-      return deserialize<_i4.User>(data['data']);
+    if (data['className'] == 'Example') {
+      return deserialize<_i4.Example>(data['data']);
     }
     return super.deserializeByClassName(data);
   }
@@ -125,14 +76,16 @@ class Protocol extends _i1.SerializationManagerServer {
   @override
   _i1.Table? getTableForType(Type t) {
     {
-      var table = _i2.Protocol().getTableForType(t);
+      var table = _i3.Protocol().getTableForType(t);
       if (table != null) {
         return table;
       }
     }
-    switch (t) {
-      case _i4.User:
-        return _i4.User.t;
+    {
+      var table = _i2.Protocol().getTableForType(t);
+      if (table != null) {
+        return table;
+      }
     }
     return null;
   }
