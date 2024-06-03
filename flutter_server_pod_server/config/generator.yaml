@@ -1,0 +1,3 @@
+type: server
+
+client_package_path: ../flutter_server_pod_client
