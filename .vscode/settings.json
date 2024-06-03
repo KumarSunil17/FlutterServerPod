@@ -1,0 +1,14 @@
+{
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 8090,
+      "driver": "PostgreSQL",
+      "database": "flutter_server_pod",
+      "name": "flutter_server_pod",
+      "username": "postgres",
+      "password": "YEQCcfJHtiuVI5Ea1m023rTf2NceTfhZ"
+    }
+  ]
+}
