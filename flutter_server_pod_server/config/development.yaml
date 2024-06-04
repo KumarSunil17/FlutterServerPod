@@ -37,5 +37,5 @@ database:
 # This is the setup for Redis.
 redis:
   enabled: false
-  host: 192.168.42.159
+  host: localhost
   port: 8091

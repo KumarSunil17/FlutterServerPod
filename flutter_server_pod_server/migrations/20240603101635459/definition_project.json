@@ -1,0 +1,19 @@
+{
+  "moduleName": "flutter_server_pod",
+  "tables": [],
+  "installedModules": [
+    {
+      "module": "serverpod",
+      "version": "20240516151843329"
+    },
+    {
+      "module": "serverpod_auth",
+      "version": "20240520102713718"
+    },
+    {
+      "module": "flutter_server_pod",
+      "version": "20240603083402184"
+    }
+  ],
+  "migrationApiVersion": 1
+}
